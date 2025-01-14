@@ -1,0 +1,21 @@
+html, body {
+    height: 100%; /* Garantiza que el body use toda la altura de la ventana */
+    margin: 0;    /* Elimina márgenes por defecto */
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Estructura en columna */
+    min-height: 100vh;      /* Asegura que el contenedor principal ocupe al menos la altura de la ventana */
+}
+
+.container {
+    flex-grow: 1; /* Hace que el contenido principal ocupe el espacio restante */
+}
+
+footer {
+    background-color: #343a40; /* Color de fondo del footer */
+    color: white;             /* Color de texto */
+    padding: 10px 0;          /* Espaciado interno */
+    text-align: center;       /* Centra el texto */
+}
