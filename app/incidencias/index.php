@@ -303,7 +303,7 @@
 
         let formData = new FormData(this);
         let errorNuevaIncidencia = document.getElementById('errorNuevaIncidencia');
-        
+
         fetch('almacenar.php', {
             method: 'POST',
             body: formData
@@ -311,15 +311,18 @@
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
+                // Mostrar errores
                 errorNuevaIncidencia.classList.remove('d-none');
-                errorNuevaIncidencia.innerHTML = data.erroresInsertarIncidencia.map(err => `<p>${err}</p>`).join('');
+                errorNuevaIncidencia.innerHTML = data.erroresNuevaIncidencia.map(err => `<p>${err}</p>`).join('');
             } else {
+                // Cerrar el modal y recargar la página para reflejar los cambios
                 let nuevaIncidenciaModal = bootstrap.Modal.getInstance(document.getElementById('nuevoModal'));
-                nuevaIncidenciaModal.hide(); // Cierra el modal
-                window.location.reload(); // Recargar para reflejar los cambios
+                nuevaIncidenciaModal.hide();
+                window.location.reload();
             }
         })
         .catch(err => console.error(err));
+
     });
 
 

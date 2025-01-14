@@ -1,9 +1,21 @@
 <?php 
 
-/*require '../config/database.php';
+require '../config/database.php';
 require 'logger.php';
 
 $logger = LogManager::getLogger();
+
+function obtenerIdEmpleado($conexion, $empleado) {
+    $sqlEmpleado = "SELECT id FROM empleados WHERE empleado = '$empleado' LIMIT 1"; 
+    $resultado = $conexion->query($sqlEmpleado);
+
+    if ($resultado && $resultado->num_rows > 0) {
+        $fila = $resultado->fetch_assoc();
+        return $fila['id'];
+    } else {
+        return null; 
+    }
+}
 
 function existeGdia($conexion, $gdia){
     $sql = "SELECT COUNT(*) AS count FROM incidencias WHERE gdia = ?";
@@ -25,8 +37,7 @@ function existeVentanilla($conexion, $ventanilla){
     return $row['count'] > 0;
 }
 
-
-$id_empleado  = $conexion->real_escape_string(trim($_POST['id_empleado'])); // Función real_escape_string para evitar las inyecciones de sql malicioso
+$id_empleado = obtenerIdEmpleado($conexion, $conexion->real_escape_string(trim($_POST['id_empleado'])));
 $gdia  = $conexion->real_escape_string(trim($_POST['gdia']));
 $estado_gdia  = $conexion->real_escape_string(trim($_POST['estado_gdia']));
 $ventanilla  = $conexion->real_escape_string(trim($_POST['ventanilla']));
@@ -35,63 +46,49 @@ $tipologia  = $conexion->real_escape_string(trim($_POST['tipologia']));
 $incidencia  = $conexion->real_escape_string(trim($_POST['incidencia']));
 $info_adicional  = $conexion->real_escape_string(trim($_POST['info_adicional']));
 
-$erroresInsertarIncidencia = [];
 
-if (empty($id_empleado)) {
-    $erroresInsertarIncidencia[] = "El empleado es obligatorio.";
+$erroresNuevaIncidencia = [];
+
+
+if (empty($id_empleado)) $erroresNuevaIncidencia[] = "El campo ID Empleado es obligatorio.";
+if (empty($gdia)) $erroresNuevaIncidencia[] = "El campo Gdia es obligatorio.";
+if (empty($estado_gdia)) $erroresNuevaIncidencia[] = "El campo Estado Gdia es obligatorio.";
+if (empty($ventanilla)) $erroresNuevaIncidencia[] = "El campo Ventanilla es obligatorio.";
+if (empty($estado_vent)) $erroresNuevaIncidencia[] = "El campo Estado Ventanilla es obligatorio.";
+if (empty($tipologia)) $erroresNuevaIncidencia[] = "El campo Tipología es obligatorio.";
+if (empty($incidencia)) $erroresNuevaIncidencia[] = "El campo Incidencia es obligatorio.";
+if (empty($info_adicional)) $erroresNuevaIncidencia[] = "El campo Información Adicional es obligatorio.";
+
+
+if (!preg_match('/^\d{7}$/', $gdia)) {
+    $erroresNuevaIncidencia[] = "El campo Gdia debe tener exactamente 7 dígitos.";
 }
 
-if (empty($gdia) && empty($ventanilla)) {
-    $erroresInsertarIncidencia[] = "El campo Gdia o el campo ventanilla no deben estar vacíos.";
-} elseif (empty($gdia)) {
-    if (!preg_match('/^INC\d{4}$/', $ventanilla)) {
-        $erroresInsertarIncidencia[] = "El campo Ventanilla debe comenzar con 'INC' seguido de 4 dígitos.";
-    }
-
-    if (existeVentanilla($conexion, $ventanilla)){
-        $erroresInsertarIncidencia[] = "Ventanilla ya incluida.";
-    }
-
-} elseif (empty($ventanilla)) {
-    if (!preg_match('/^\d{7}$/', $gdia)) {
-        $erroresInsertarIncidencia[] = "El campo Gdia debe tener exactamente 7 dígitos.";
-    }
-
-    if (existeGdia($conexion, $gdia)){
-        $erroresInsertarIncidencia[] = "Gdia ya incluido.";
-    }
-
-} else {
-    if (!preg_match('/^INC\d{4}$/', $ventanilla)) {
-        $erroresInsertarIncidencia[] = "El campo Ventanilla debe comenzar con 'INC' seguido de 4 dígitos.";
-    }
-
-    if (!preg_match('/^\d{7}$/', $gdia)) {
-        $erroresInsertarIncidencia[] = "El campo Gdia debe tener exactamente 7 dígitos.";
-    }
+if (existeGdia($conexion, $gdia)){
+    $erroresInsertarIncidencia[] = "Gdia ya incluido.";
 }
 
-if (empty($tipologia)) {
-    $erroresInsertarIncidencia[] = "El campo Tipología es obligatorio.";
-}
-if (empty($incidencia)) {
-    $erroresInsertarIncidencia[] = "El campo Incidencia es obligatorio.";
+if (!preg_match('/^INC\d{4}$/', $ventanilla)) {
+    $erroresNuevaIncidencia[] = "El campo Ventanilla debe comenzar con 'INC' seguido de 4 dígitos.";
 }
 
-if (!empty($erroresInsertarIncidencia)) {
-    echo json_encode(["success" => false, "erroresInsertarIncidencia" => $erroresInsertarIncidencia]);
+if (existeVentanilla($conexion, $ventanilla)){
+    $erroresInsertarIncidencia[] = "Ventanilla ya incluida.";
+}
+
+if (!empty($erroresNuevaIncidencia)) {
+    echo json_encode(["success" => false, "erroresNuevaIncidencia" => $erroresNuevaIncidencia]);
     exit;
 } else {
-    $sql = "INSERT INTO incidencias (id_empleado, gdia, estado_gdia, ventanilla, estado_vent, tipologia, incidencia, info_adicional) VALUES ($id_empleado, '$gdia', '$estado_gdia', '$ventanilla', '$estado_vent', '$tipologia', '$incidencia', '$info_adicional')";
+   
+    $sql = "INSERT INTO incidencias (id_empleado, gdia, estado_gdia, ventanilla, estado_vent, tipologia, incidencia, info_adicional) 
+            VALUES ('$id_empleado', '$gdia', '$estado_gdia', '$ventanilla', '$estado_vent', '$tipologia', '$incidencia', '$info_adicional')";
     if($conexion->query($sql)){
-        $id = $conexion->insert_id;
         $logger->info("Incidencia añadida", ['gdia' => $gdia, 'ventanilla' => $ventanilla]);
-        echo json_encode(['success' => true]);
+        echo json_encode(["success" => true]);
     } else {
-        $logger->error("Error al insertar inccidencia.", ['error' => $conexion->error]);
-        echo json_encode(["success" => false, "erroresInsertarIncidencia" => ["Error al guardar la incidencia. Inténtalo de nuevo."]]);
+        $logger->error("Error al insertar incidencia.", ['error' => $conexion->error]);
+        echo json_encode(["success" => false, "mensaje" => ["Error al incluir una nueva incidencia."]]);
     }
-}*/
-
-
+}
 ?>

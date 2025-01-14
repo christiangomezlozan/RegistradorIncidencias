@@ -15,19 +15,19 @@
 
             <div class="mb-3">
                 <label for="empleado" class="form-label">Empleado</label>
-                <input type="text" name="empleado" id="empleado" class="form-control" >
+                <input type="text" name="empleado" id="empleado" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" >
+                <input type="text" name="nombre" id="nombre" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="apellidos" class="form-label">Apellidos</label>
-                <input type="text" name="apellidos" id="apellidos" class="form-control" >
+                <input type="text" name="apellidos" id="apellidos" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="clave" class="form-label">Contraseña</label>
-                <input type="text" name="clave" id="clave" class="form-control" >
+                <input type="text" name="clave" id="clave" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="cargo" class="form-label">Cargo</label>

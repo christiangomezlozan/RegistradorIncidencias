@@ -10,6 +10,16 @@ function validarTexto($texto) {
     return preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $texto);
 }
 
+function existeEmpleado($conexion, $empleado){
+    $sql = "SELECT COUNT(*) AS count FROM empleados WHERE empleado = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $empleado);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['count'] > 0;
+}
+
 $idEmpleado  = $conexion->real_escape_string(trim($_POST['idEmpleado'])); 
 $empleado  = $conexion->real_escape_string(trim($_POST['empleado'])); // Función real_escape_string para evitar las inyecciones de sql malicioso
 $nombre  = $conexion->real_escape_string(trim($_POST['nombre']));
@@ -19,7 +29,11 @@ $cargo  = $conexion->real_escape_string(trim($_POST['cargo']));
 
 $erroresActualizarEmpleado = [];
 
-if (empty($empleado)) $erroresActualizarEmpleado[] = "El campo 'Empleado' es obligatorio.";
+if (empty($empleado)){
+    $erroresActualizarEmpleado[] = "El campo 'Empleado' es obligatorio.";
+} elseif (existeEmpleado($conexion, $empleado)){
+   $erroresActualizarEmpleado[] = "Identificador de empleado ya utilizado. Introduzca otro.";
+}
 if (empty($nombre)) $erroresActualizarEmpleado[] = "El campo 'Nombre' es obligatorio.";
 elseif (!validarTexto($nombre)) $erroresActualizarEmpleado[] = "El nombre solo debe contener letras.";
 
