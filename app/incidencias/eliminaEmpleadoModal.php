@@ -11,9 +11,8 @@
       <div class="modal-footer" >
         <form action="eliminarEmpleado.php" method="POST" >
             <input type="hidden" name="idEmpleado" id="idEmpleado" >
-            
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             <button type="submit" class="btn btn-primary">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </form>
       </div>
     </div>

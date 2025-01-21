@@ -9,9 +9,8 @@
 
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+            <li class="nav-item"><a href="sobreAplicacion.php" class="nav-link px-2 text-white">Sobre la aplicación</a></li>
+            <li class="nav-item"><a href="contacto.php" class="nav-link px-2 text-white">Contacto</a></li>
         </ul>
 
       </div>

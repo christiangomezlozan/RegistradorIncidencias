@@ -19,8 +19,8 @@
             </div>
 
             <div class="">
+                <button type="submit" class="btn btn-primary">Iniciar sesion</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary">Iniciar sesion</button> 
             </div>
 
         </form>

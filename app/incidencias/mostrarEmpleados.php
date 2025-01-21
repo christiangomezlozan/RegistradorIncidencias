@@ -16,6 +16,7 @@
 
     $sqlEmpleados = "SELECT id, empleado, nombre, apellidos FROM empleados";
     $empleados = $conexion->query($sqlEmpleados);
+
 ?>
     <?php require 'header.php'; ?>
     <?php $_SESSION['paginaAnterior'] = 'mostrarEmpleados.php'; ?>
@@ -34,6 +35,7 @@
                 <th scope="col">identificador</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellidos</th>
+                <th scope="col">Incidencias tratadas</th>
                 <?php if(isset($_SESSION['usuarioLogueado']) && $_SESSION['usuarioLogueado'] == 'admin') {  ?>
                     <th scope="col"></th>
                 <?php } ?>
@@ -47,6 +49,13 @@
                 <td><?= $empleado['empleado'] ?></td>
                 <td><?= $empleado['nombre'] ?></td>
                 <td><?= $empleado['apellidos'] ?></td>
+                <?php 
+                    $sqlNumIncidencias = "SELECT COUNT(*) as totalIncidencias FROM incidencias WHERE id_empleado = " . $empleado['id'];
+                    $numIncidencias = $conexion->query($sqlNumIncidencias);
+                    $contIncidencias = $numIncidencias->fetch_assoc()['totalIncidencias'];
+                
+                ?>
+                <td><?= $contIncidencias ?></td>
                 <?php if(isset($_SESSION['usuarioLogueado']) && $_SESSION['usuarioLogueado'] == 'admin') {  ?>
                     <td>
                         <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editaEmpleadoModal" data-bs-idEmpleado="<?= $empleado['id'] ?>" ><i class="fa-solid fa-pen-to-square"></i>Editar</a>

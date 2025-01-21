@@ -9,7 +9,7 @@
         <div id="errorNuevaIncidencia" class="alert alert-danger d-none" role="alert"></div>
         <form action="almacenar.php" method="POST" id="nuevaIncidenciaForm" >
 
-            <input type="hidden" id="id_empleado" name="id_empleado" value="<?= $_SESSION['identificador'] ?>" >
+            <input type="hidden" id="id_empleado" name="id_empleado" value=" <?php $_SESSION['identificador'] ?>" >
             
             <div class="mb-3">
                 <label for="gdia" class="form-label">Gdia</label>
@@ -65,8 +65,8 @@
             </div>
 
             <div class="">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk me-2"></i>Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
 
         </form>
