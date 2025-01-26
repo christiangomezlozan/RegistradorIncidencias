@@ -1,0 +1,41 @@
+html, body {
+    height: 100%; 
+    margin: 0;    
+}
+
+body {
+    display: flex;
+    flex-direction: column; 
+    min-height: 100vh;      
+}
+
+.container {
+    flex-grow: 1; 
+}
+
+footer {
+    background-color: #343a40; 
+    color: white;             
+    padding: 10px 0;         
+    text-align: center;       
+}
+
+h2 {
+   padding-bottom: 0.5em;
+}
+
+.descripcion {
+    display: none; 
+}
+
+.tipologia:hover .descripcion {
+    display: block;
+    position: absolute; 
+    background-color: #333; 
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 100; 
+}
